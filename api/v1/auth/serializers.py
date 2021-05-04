@@ -1,6 +1,7 @@
+from django.contrib.auth import get_user_model
+from math_test.models import Student, Tutor
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from django.contrib.auth import get_user_model
 
 
 User = get_user_model()
@@ -12,7 +13,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'password')
+        fields = ('id', 'username', 'password', 'first_name', 'last_name')
 
     def create(self, validated_data):
         password = validated_data.pop('password')
@@ -20,3 +21,26 @@ class UserCreateSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user
+
+
+class StudentCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        fields = ('group',)
+
+    def create(self,validated_data):
+        validated_data['user'] = self.context['request'].user
+        return super().create(validated_data)
+    
+
+
+class TeacherCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tutor
+        fields = ('group',)
+
+    def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
+        return super().create(validated_data)
+        
+

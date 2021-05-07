@@ -1,5 +1,7 @@
+from math_test.models import TaskProblem
+from re import L
 from math_test.permissions import TeacherPermission
-from api.v1.tasks.serializers import ProblemCreateSerializer, TaskSendSerializer, ThemeCreateSerializer
+from api.v1.tasks.serializers import ProblemCreateSerializer, TaskProblemCreateSerializer, TaskSendSerializer, ThemeCreateSerializer
 from rest_framework.generics import CreateAPIView, ListAPIView
 
 
@@ -17,3 +19,7 @@ class ThemeCreateView(CreateAPIView):
     serializer_class = ThemeCreateSerializer
     permission_classes = [TeacherPermission, ]
 
+
+class TaskProblemCreateView(CreateAPIView):
+    serializer_class = TaskProblemCreateSerializer
+    permission_classes = [TeacherPermission,]

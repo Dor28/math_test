@@ -1,5 +1,5 @@
 from django.core.exceptions import ValidationError
-from math_test.models import Problem, Task, Theme
+from math_test.models import Problem, Task, TaskProblem, Theme
 from rest_framework import serializers
 
 
@@ -44,7 +44,7 @@ class ThemeCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Theme 
         fields = ('description', 'title', 'answer')
-        
+
     def validate(self,attrs):
         user = self.context['request'].user
         if not hasattr(user, 'tutor'):
@@ -59,7 +59,9 @@ class ThemeCreateSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
     
 
-        
-
-            
+class TaskProblemCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TaskProblem
+        fields = ('problem', 'task')
+    
         

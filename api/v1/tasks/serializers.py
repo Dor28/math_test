@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
-from math_test.models import Problem, Task, TaskProblem, Theme
+from math_test.models import Problem, Task, TaskProblem, Theme, Tutor
 from rest_framework import serializers
-
+from datetime import datetime
 
 class ProblemCreateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -65,3 +65,22 @@ class TaskProblemCreateSerializer(serializers.ModelSerializer):
         fields = ('problem', 'task')
     
         
+
+class TaskReceiveListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = ('expiration', 'description', 'title', 'tutor', 'group')
+
+    def validate(self, attrs):
+        if datetime.today < attrs.get('expiration'):
+            raise ValidationError({'detail': 'date expired'})
+        return super().validate(attrs)
+
+    def to_representation(self, instance:Task):
+        response = super().to_representation(instance)
+        tutor = User.objects.filter()
+        tutor = Tutor.objects.filter(id=instance.tutor.id)
+        response['tutor'] = tutor.
+
+
+        return response

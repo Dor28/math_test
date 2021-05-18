@@ -12,10 +12,9 @@ class Base(models.Model):
         abstract = True
 
 class User(AbstractUser):
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    
+    REQUIRED_FIELDS = ['first_name', 'last_name']
 
+    
 
 
 class Group(Base):

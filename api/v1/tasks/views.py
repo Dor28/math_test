@@ -1,7 +1,7 @@
-from math_test.models import TaskProblem
+from math_test.models import Student, Task, TaskProblem,Tutor
 from re import L
 from math_test.permissions import TeacherPermission
-from api.v1.tasks.serializers import ProblemCreateSerializer, TaskProblemCreateSerializer, TaskSendSerializer, ThemeCreateSerializer
+from api.v1.tasks.serializers import ProblemCreateSerializer, TaskProblemCreateSerializer, TaskReceiveListSerializer, TaskSendSerializer, ThemeCreateSerializer
 from rest_framework.generics import CreateAPIView, ListAPIView
 
 
@@ -23,3 +23,19 @@ class ThemeCreateView(CreateAPIView):
 class TaskProblemCreateView(CreateAPIView):
     serializer_class = TaskProblemCreateSerializer
     permission_classes = [TeacherPermission,]
+
+
+class TaskReceiveListView(ListAPIView):
+    serializer_class = TaskReceiveListSerializer
+    
+    def get_queryset(self):
+        user_from_request = self.request.user
+        if hasattr(user_from_request, 'student'):
+            student = Student.objects.get(user=user_from_request)
+            print(student)
+            group = student.group.last()
+            qs = Task.objects.filter(group=group)
+        if hasattr(user_from_request, 'teacher'):
+            teacher = Tutor.objects.filter(user=user_from_request)
+            qs = Task.objects.filter(tutor=teacher)
+        return qs

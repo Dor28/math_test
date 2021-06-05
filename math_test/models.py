@@ -43,20 +43,6 @@ class Theme(Base):
     tutor = models.ForeignKey("Tutor", on_delete=models.CASCADE)
 
 
-class Task(Base):
-    expiration = models.DateField()
-    description = models.TextField()
-    title = models.TextField()
-    tutor = models.ForeignKey("Tutor", on_delete=models.CASCADE)
-    group = models.ForeignKey("Group", on_delete=models.CASCADE)
-    problem = models.ForeignKey("Problem", on_delete=models.CASCADE)
-
-
-class TaskProblem(Base):
-    problem = models.ForeignKey("Problem", on_delete=models.CASCADE)
-    task = models.ManyToManyField("Task")
-
-
 class Problem(Base):
     condition = models.TextField(default="")
     prompt = models.TextField(default="")
@@ -65,3 +51,18 @@ class Problem(Base):
     title = models.TextField()
     answer = models.TextField(default="")
     tutor = models.ForeignKey("Tutor", on_delete=models.CASCADE)
+
+
+class Task(Base):
+    expiration = models.DateField()
+    description = models.TextField()
+    title = models.TextField()
+    tutor = models.ForeignKey("Tutor", on_delete=models.CASCADE)
+    group = models.ForeignKey("Group", on_delete=models.CASCADE)
+    problem = models.ManyToManyField(Problem)
+
+
+class TaskProblem(Base):
+    problem = models.ForeignKey("Problem", on_delete=models.CASCADE)
+    task = models.ManyToManyField("Task")
+

@@ -37,7 +37,7 @@ class ProblemListSerializer(serializers.ModelSerializer):
 class TaskSendSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = ('expiration', 'description', 'title', 'group')
+        fields = ('expiration', 'description', 'title', 'tutor', 'group', 'problem')
 
     def validate(self, attrs):
         user = self.context['request'].user
@@ -78,14 +78,10 @@ class TaskProblemCreateSerializer(serializers.ModelSerializer):
 
 class TaskReceiveListSerializer(serializers.ModelSerializer):
     problem = ProblemListSerializer(read_only=True, many=True)
+
     class Meta:
         model = Task
         fields = ('expiration', 'description', 'title', 'tutor', 'group', 'problem')
-
-    # def validate(self, attrs):
-    #     if datetime.today < attrs.get('expiration'):
-    #         raise ValidationError({'detail': 'date expired'})
-    #     return super().validate(attrs)
 
     def to_representation(self, instance: Task):
         response = super().to_representation(instance)

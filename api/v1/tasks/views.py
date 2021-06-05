@@ -30,7 +30,7 @@ class TaskReceiveListView(ListAPIView):
     
     def get_queryset(self):
         user_from_request = self.request.user
-        qs = Tutor.objects.all()
+        qs = Task.objects.all()
         if hasattr(user_from_request, 'student'):
             student = Student.objects.get(user=user_from_request)
             group = student.group.last()

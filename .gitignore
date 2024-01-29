@@ -163,4 +163,3 @@ Thumbs.db
 # this project
 deploy/.env
 my_env/
-your-env/
